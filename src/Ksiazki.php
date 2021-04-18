@@ -1,6 +1,7 @@
 <?php
 
 namespace Ibd;
+use Ibd\Autorzy;
 
 class Ksiazki
 {
@@ -40,6 +41,36 @@ class Ksiazki
     }
 
     /**
+     * Pobiera autora książki o podanym id.
+     *
+     * @param int $id
+     * @return array
+     */
+    public function pobierzAutora(int $id): ?string
+    {
+        $autorzy = new Autorzy();
+        $ksiazka = $this->db->pobierz('ksiazki', $id);
+        $autor = $autorzy->pobierz($ksiazka['id_autora']);
+
+        return $autor['imie'] . " " . $autor['nazwisko'];
+    }
+
+    /**
+     * Pobiera kategorię książki o podanym id.
+     *
+     * @param int $id
+     * @return array
+     */
+    public function pobierzKategorie(int $id): ?string
+    {
+        $kategorie = new Kategorie();
+        $ksiazka = $this->db->pobierz('ksiazki', $id);
+        $kategoria = $kategorie->pobierz($ksiazka['id_kategorii']);
+
+        return $kategoria['nazwa'];
+    }
+
+    /**
      * Pobiera najlepiej sprzedające się książki.
      *
      */
@@ -47,7 +78,7 @@ class Ksiazki
     {
         $sql = "SELECT * FROM ksiazki ORDER BY RAND() LIMIT 5";
 
-        // uzupełnić funkcję
+        return $this->db->pobierzWszystko($sql);
     }
 
     /**
@@ -59,7 +90,11 @@ class Ksiazki
     public function pobierzZapytanie(array $params = []): array
     {
         $parametry = [];
-        $sql = "SELECT k.* FROM ksiazki k WHERE 1=1 ";
+        $sql = "SELECT k.*, concat(a.imie,' ',a.nazwisko) as autor, kat.nazwa as kategoria  
+                FROM ksiazki k 
+                    join autorzy a on k.id_autora = a.id
+                    join kategorie kat on k.id_kategorii = kat.id
+                WHERE 1=1 ";
 
         // dodawanie warunków do zapytanie
         if (!empty($params['fraza'])) {
@@ -69,6 +104,10 @@ class Ksiazki
         if (!empty($params['id_kategorii'])) {
             $sql .= "AND k.id_kategorii = :id_kategorii ";
             $parametry['id_kategorii'] = $params['id_kategorii'];
+        }
+        if (!empty($params['id'])) {
+            $sql .= "AND k.id = :id ";
+            $parametry['id'] = $params['id'];
         }
 
         // dodawanie sortowania
@@ -89,7 +128,7 @@ class Ksiazki
      * Pobiera stronę z danymi książek.
      *
      * @param string $select
-     * @param array  $params
+     * @param array $params
      * @return array
      */
     public function pobierzStrone(string $select, array $params = []): array

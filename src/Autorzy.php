@@ -2,7 +2,7 @@
 
 namespace Ibd;
 
-class Kategorie
+class Autorzy
 {
     /**
      * Instancja klasy obsługującej połączenie do bazy.
@@ -17,26 +17,26 @@ class Kategorie
     }
 
     /**
-     * Pobiera wszystkie kategorie.
+     * Pobiera wszystkich autorów.
      *
      * @return array
      */
-    public function pobierzWszystkie(): array
+    public function pobierzWszystkich(): array
     {
-        $sql = "SELECT * FROM kategorie";
+        $sql = "SELECT * FROM autorzy";
 
         return $this->db->pobierzWszystko($sql);
     }
 
     /**
-     * Pobiera dane kategorii o podanym id.
+     * Pobiera dane autora o podanym id.
      *
      * @param int $id
      * @return array
      */
     public function pobierz(int $id): ?array
     {
-        return $this->db->pobierz('kategorie', $id);
+        return $this->db->pobierz('autorzy', $id);
     }
 
 }
