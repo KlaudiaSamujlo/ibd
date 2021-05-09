@@ -16,6 +16,7 @@ $zapytanie = $ksiazki->pobierzZapytanie($_GET);
 // dodawanie warunków stronicowania i generowanie linków do stron
 $stronicowanie = new Stronicowanie($_GET, $zapytanie['parametry']);
 $linki = $stronicowanie->pobierzLinki($zapytanie['sql'], 'ksiazki.lista.php');
+$wybrane = $stronicowanie->wybraneRekordy($zapytanie['sql']);
 $select = $stronicowanie->dodajLimit($zapytanie['sql']);
 $lista = $ksiazki->pobierzStrone($select, $zapytanie['parametry']);
 ?>
@@ -54,6 +55,13 @@ $lista = $ksiazki->pobierzStrone($select, $zapytanie['parametry']);
             <option value="k.cena DESC"
                 <?= ($_GET['sortowanie'] ?? '') == 'k.cena DESC' ? 'selected' : '' ?>
             >cenie malejąco
+            <option value="a.nazwisko ASC"
+                <?= ($_GET['sortowanie'] ?? '') == "a.nazwisko ASC" ? 'selected' : '' ?>
+            >autorze rosnąco
+            </option>
+            <option value="a.nazwisko DESC"
+                <?= ($_GET['sortowanie'] ?? '') == "a.nazwisko DESC" ? 'selected' : '' ?>
+            >autorze malejąco
             </option>
         </select>
 
@@ -95,8 +103,17 @@ $lista = $ksiazki->pobierzStrone($select, $zapytanie['parametry']);
         </tbody>
     </table>
 
-    <nav class="text-center">
-        <?= $linki ?>
-    </nav>
+    <table style="width:100%">
+        <tr>
+            <td>
+                <nav class="text-center">
+                    <?= $linki ?>
+                </nav>
+            </td>
+            <td style="text-align: right; vertical-align:top">
+                <?= $wybrane ?>
+            </td>
+        </tr>
+    </table>
 
 <?php include 'footer.php'; ?>

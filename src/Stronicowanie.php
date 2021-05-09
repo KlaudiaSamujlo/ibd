@@ -75,6 +75,19 @@ class Stronicowanie
         $parametry = $this->_przetworzParametry();
 
         $linki = "<nav><ul class='pagination'>";
+        $linki .= sprintf(
+            "<li class='page-item'><a href='%s?%s&strona=%d' class='page-link'>Początek</a></li>",
+            $plik,
+            $parametry,
+            0
+        );
+        $poprzednia = ($this->strona == 0) ? 0 : $this->strona - 1;
+        $linki .= sprintf(
+            "<li class='page-item'><a href='%s?%s&strona=%d' class='page-link'>Poprzednia</a></li>",
+            $plik,
+            $parametry,
+            $poprzednia
+        );
         for ($i = 0; $i < $liczbaStron; $i++) {
             if ($i == $this->strona) {
                 $linki .= sprintf("<li class='page-item active'><a class='page-link'>%d</a></li>", $i + 1);
@@ -88,9 +101,42 @@ class Stronicowanie
                 );
             }
         }
+        $nastepna = ($this->strona == $liczbaStron - 1) ? $liczbaStron - 1 : $this->strona + 1;
+        $linki .= sprintf(
+            "<li class='page-item'><a href='%s?%s&strona=%d' class='page-link'>Następna</a></li>",
+            $plik,
+            $parametry,
+            $nastepna
+        );
+        $linki .= sprintf(
+            "<li class='page-item'><a href='%s?%s&strona=%d' class='page-link'>Koniec</a></li>",
+            $plik,
+            $parametry,
+            $liczbaStron - 1
+        );
         $linki .= "</ul></nav>";
 
         return $linki;
+    }
+
+    /**
+     * Wyswietla informacje o liczbie wybranych rekordow.
+     *
+     * @param string $select Zapytanie SELECT
+     * @param string $plik Nazwa pliku, do którego będą kierować linki
+     * @return string
+     */
+    public function wybraneRekordy(string $select): string
+    {
+        $rekordow = $this->db->policzRekordy($select, $this->parametryZapytania);
+        $wybraneMin = $this->strona * $this->naStronie + 1;
+        $wybraneMax = ($this->strona + 1) * ($this->naStronie);
+
+        if(($this->strona + 1) * ($this->naStronie) > $rekordow) {
+            $wybraneMax = $rekordow;
+        };
+
+        return "Wyświetlono " . $wybraneMin . " - " . $wybraneMax . " z " . $rekordow . " rekordów";
     }
 
     /**
