@@ -32,7 +32,7 @@ class Koszyk
 	}
 
     /**
-     * Pobiera dane książki w koszyku na podstawie id książki i id sesji.
+     * Zwraca id koszyka na podstawie id książki i id sesji.
      *
      * @param int    $idKsiazki
      * @param string $idSesji

@@ -6,10 +6,14 @@ use Ibd\Uzytkownicy;
 use Valitron\Validator;
 
 $uzytkownicy = new Uzytkownicy();
+
 $v = new Validator($_POST);
 
 if (isset($_POST['zapisz'])) {
     $v->rule('required', ['imie', 'nazwisko', 'adres', 'email', 'login', 'haslo']);
+    $v->rule('email','email');
+    $v->rule('notIn', 'login', $uzytkownicy->pobierzLoginy())->message('Podany login już istnieje');
+    $v->rule('notIn', 'email', $uzytkownicy->pobierzAdresyEmail())->message('W systemie istnieje już użytkownik o podanym adresie email');
 
     if ($v->validate()) {
         // brak błędów, można dodać użytkownika

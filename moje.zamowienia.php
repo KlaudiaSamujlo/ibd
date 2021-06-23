@@ -2,74 +2,50 @@
 require_once 'vendor/autoload.php';
 session_start();
 
-use Ibd\Koszyk, Ibd\Zamowienia;
+use Ibd\Zamowienia;
 
 if (empty($_SESSION['id_uzytkownika'])) {
 	header("Location: index.php");
 	exit();
 }
-	
-$koszyk = new Koszyk();
+
 $zamowienia = new Zamowienia();
-$listaKsiazek = $koszyk->pobierzWszystkie();
-
-if (isset($_POST['zamow'])) {
-    $idZamowienia = $zamowienia->dodaj($_SESSION['id_uzytkownika']);
-    $zamowienia->dodajSzczegoly($idZamowienia, $listaKsiazek);
-    $koszyk->wyczysc(session_id());
-
-    header("Location: index.php?msg=3");
-}
+$listaZamowien = $zamowienia->pobierzDlaUzytkownika($_SESSION['id_uzytkownika']);
+setlocale(LC_ALL, 'pl', 'pl_PL', 'pl_PL.ISO8859-2', 'plk', 'polish', 'Polish');
 
 include 'header.php';
 ?>
 
-<h1>Finalizacja zamówienia</h1>
-
-<form method="post" action="">
+<h1>Moje zamówienia</h1>
 
 <table class="table table-striped table-condensed">
 	<thead>
 		<tr>
-			<th>&nbsp;</th>
-			<th>Tytuł</th>
-			<th>Autor</th>
-			<th>Kategoria</th>
-			<th>Cena PLN</th>
-			<th>Liczba sztuk</th>
-			<th>Cena razem</th>
+			<th>Nr zamówienia</th>
+            <th>Status</th>
+            <th>Data złożenia</th>
+			<th>Liczba produktów</th>
+			<th>Wartość</th>
+            <th>&nbsp;</th>
 		</tr>
 	</thead>
 	<tbody>
-		<?php foreach ($listaKsiazek as $ks): ?>
+		<?php foreach ($listaZamowien as $z): ?>
 		<tr>
-            <td style="width: 100px">
-                <?php if (!empty($ks['zdjecie'])): ?>
-                    <img src="zdjecia/<?=$ks['zdjecie']?>" alt="<?=$ks['tytul']?>" class="img-thumbnail" />
-                <?php else: ?>
-                    brak zdjęcia
-                <?php endif; ?>
-			</td>
-			<td><?=$ks['tytul']?></td>
-			<td><?=$ks['id_autora']?></td>
-			<td><?=$ks['id_kategorii']?></td>
-			<td><?=$ks['cena']?> zł</td>
-			<td><?=$ks['liczba_sztuk']?></td>
-			<td><?=$ks['cena']*$ks['liczba_sztuk']?> zł</td>
+			<td><?=$z['id']?></td>
+            <td><?=ucfirst($z['status'])?></td>
+            <td><?=strftime("%d %B %Y",strtotime($z['data_dodania']))?></td>
+			<td><?=$z['liczba_produktow']?></td>
+			<td><?=$z['suma']?> zł</td>
+            <td>
+                <a href="moje.zamowienia.szczegoly.php?id=<?= $z['id'] ?>" title="szczegóły">
+                    <i class="fas fa-folder-open"></i>
+                </a>
+            </td>
 		</tr>
 		<?php endforeach; ?>
 	</tbody>
-    <tfoot>
-		<tr>
-			<td colspan="7" class="text-right">
-				<input type="submit" name="zamow" class="btn btn-primary btn-sm" value="Złóż zamówienie" />
-				<a href="koszyk.lista.php" class="btn btn-link btn-sm">Powrót do koszyka</a>
-			</td>
-		</tr>
-    </tfoot>
 
 </table>
-
-</form>
 
 <?php include 'footer.php'; ?>

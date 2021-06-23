@@ -2,7 +2,7 @@
 require_once 'vendor/autoload.php';
 session_start();
 
-use Ibd\Koszyk, Ibd\Zamowienia;
+use Ibd\Koszyk, Ibd\Zamowienia, Ibd\Ksiazki;
 
 if (empty($_SESSION['id_uzytkownika'])) {
 	header("Location: index.php");
@@ -11,6 +11,7 @@ if (empty($_SESSION['id_uzytkownika'])) {
 	
 $koszyk = new Koszyk();
 $zamowienia = new Zamowienia();
+$ksiazki= new Ksiazki();
 $listaKsiazek = $koszyk->pobierzWszystkie();
 
 if (isset($_POST['zamow'])) {
@@ -51,8 +52,8 @@ include 'header.php';
                 <?php endif; ?>
 			</td>
 			<td><?=$ks['tytul']?></td>
-			<td><?=$ks['id_autora']?></td>
-			<td><?=$ks['id_kategorii']?></td>
+			<td><?=$ksiazki->pobierzAutora($ks['id'])?></td>
+			<td><?=$ksiazki->pobierzKategorie($ks['id'])?></td>
 			<td><?=$ks['cena']?> zł</td>
 			<td><?=$ks['liczba_sztuk']?></td>
 			<td><?=$ks['cena']*$ks['liczba_sztuk']?> zł</td>

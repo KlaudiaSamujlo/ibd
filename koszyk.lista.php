@@ -3,8 +3,10 @@ require_once 'vendor/autoload.php';
 session_start();
 
 use Ibd\Koszyk;
+use Ibd\Ksiazki;
 
 $koszyk = new Koszyk();
+$ksiazki= new Ksiazki();
 
 if(isset($_POST['zmien'])) {
 	$koszyk->zmienLiczbeSztuk($_POST['ilosci']);
@@ -49,9 +51,9 @@ include 'header.php';
 							<?php endif; ?>
 						</td>
 						<td><?= $ks['tytul'] ?></td>
-						<td><?= $ks['id_autora'] ?></td>
-						<td><?= $ks['id_kategorii'] ?></td>
-						<td><?= $ks['cena'] ?></td>
+						<td><?= $ksiazki->pobierzAutora($ks['id']) ?></td>
+						<td><?= $ksiazki->pobierzKategorie($ks['id']) ?></td>
+						<td><?= round($ks['cena'],2) ?></td>
 						<td>
 							<div style="width: 50px">
 								<input type="text" name="ilosci[<?= $ks['id_koszyka'] ?>]" value="<?= $ks['liczba_sztuk'] ?>" class="form-control" />
@@ -72,7 +74,7 @@ include 'header.php';
             <tfoot>
 
                 <tr>
-                    <td colspan="4" class="text-left" style="font-size: 18px"> Razem do zapłaty: <b> <?= $suma ?> zł </b></td>
+                    <td colspan="4" class="text-left" style="font-size: 18px"> Razem do zapłaty: <b> <?= round($suma,2) ?> zł </b></td>
                     <td colspan="4" class="text-right">
                         <input type="submit" class="btn btn-secondary btn-sm" name="zmien" value="Zmień liczbę sztuk" />
                         <?php if (!empty($_SESSION['id_uzytkownika'])): ?>

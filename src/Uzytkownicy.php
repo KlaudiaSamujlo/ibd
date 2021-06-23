@@ -50,7 +50,7 @@ class Uzytkownicy
     public function zaloguj(string $login, string $haslo, string $grupa): bool
     {
         $dane = $this->db->pobierzWszystko(
-            "SELECT * FROM uzytkownicy WHERE login = :login AND grupa = '$grupa'", ['login' => $login] // AND haslo = '$haslo'
+            "SELECT * FROM uzytkownicy WHERE login = :login AND grupa = '$grupa'", ['login' => $login]
         );
 
         if ($dane && password_verify($haslo,$dane[0]['haslo'])) {
@@ -101,6 +101,17 @@ class Uzytkownicy
     }
 
     /**
+     * Pobiera wszystkich użytkowników.
+     *
+     * @return array
+     */
+    public function pobierzWszystkich(): array
+    {
+        $sql = "SELECT * FROM uzytkownicy WHERE 1=1";
+        return $this->db->pobierzWszystko($sql);
+    }
+
+    /**
      * Usuwa użytkownika.
      *
      * @param int $id
@@ -145,5 +156,37 @@ class Uzytkownicy
         }
 
         return $this->db->aktualizuj('uzytkownicy', $update, $id);
+    }
+
+    /**
+     * Sprawdza, czy podany login już istnieje.
+     *
+     * @return array
+     */
+    public function pobierzLoginy(): array
+    {
+        $logins = array();
+        $user = $this->pobierzWszystkich();
+        foreach ($user as $u) {
+            $logins[] = $u['login'];
+        }
+
+        return $logins;
+    }
+
+    /**
+     * Sprawdza, czy podany adres email już istnieje.
+     *
+     * @return array
+     */
+    public function pobierzAdresyEmail(): array
+    {
+        $emails = array();
+        $user = $this->pobierzWszystkich();
+        foreach ($user as $u) {
+            $emails[] = $u['email'];
+        }
+
+        return $emails;
     }
 }
