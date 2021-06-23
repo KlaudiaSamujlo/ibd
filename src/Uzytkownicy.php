@@ -25,6 +25,8 @@ class Uzytkownicy
      */
     public function dodaj(array $dane, string $grupa = 'użytkownik'): int
     {
+        $pass = password_hash($dane['haslo'], PASSWORD_BCRYPT);
+
         return $this->db->dodaj('uzytkownicy', [
             'imie' => $dane['imie'],
             'nazwisko' => $dane['nazwisko'],
@@ -32,7 +34,7 @@ class Uzytkownicy
             'telefon' => $dane['telefon'],
             'email' => $dane['email'],
             'login' => $dane['login'],
-            'haslo' => md5($dane['haslo']),
+            'haslo' => $pass,
             'grupa' => $grupa
         ]);
     }
@@ -47,12 +49,11 @@ class Uzytkownicy
      */
     public function zaloguj(string $login, string $haslo, string $grupa): bool
     {
-        $haslo = md5($haslo);
         $dane = $this->db->pobierzWszystko(
-            "SELECT * FROM uzytkownicy WHERE login = :login AND haslo = '$haslo' AND grupa = '$grupa'", ['login' => $login]
+            "SELECT * FROM uzytkownicy WHERE login = :login AND grupa = '$grupa'", ['login' => $login] // AND haslo = '$haslo'
         );
 
-        if ($dane) {
+        if ($dane && password_verify($haslo,$dane[0]['haslo'])) {
             $_SESSION['id_uzytkownika'] = $dane[0]['id'];
             $_SESSION['grupa'] = $dane[0]['grupa'];
             $_SESSION['login'] = $dane[0]['login'];

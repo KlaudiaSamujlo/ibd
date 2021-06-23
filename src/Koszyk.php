@@ -31,6 +31,25 @@ class Koszyk
 		return $this->db->pobierzWszystko($sql);
 	}
 
+    /**
+     * Pobiera dane książki w koszyku na podstawie id książki i id sesji.
+     *
+     * @param int    $idKsiazki
+     * @param string $idSesji
+     * @return array
+     */
+    public function dodajKolejna(int $idKsiazki, string $idSesji): int
+    {
+        $sql = "SELECT * FROM koszyk WHERE id_sesji = '$idSesji' AND id_ksiazki = " . $idKsiazki;
+        $record = $this->db->pobierzWszystko($sql);
+        $id = 0;
+        foreach($record as $r){
+            $this->db->aktualizuj('koszyk', ['liczba_sztuk' => $r['liczba_sztuk']+1], $r['id']);
+            $id = $r['id'];
+        }
+        return $id;
+    }
+
 	/**
 	 * Dodaje książkę do koszyka.
 	 *
@@ -62,6 +81,23 @@ class Koszyk
 		
 		return $ile > 0;
 	}
+
+    /**
+     * Liczy ilość ksiązek w koszyku dla podanej sesji.
+     *
+     * @param string $idSesji
+     * @return int
+     */
+    public function policzKsiazki(): int
+    {
+        $listaKsiazek = $this->pobierzWszystkie();
+        $suma = 0;
+        foreach($listaKsiazek as $ks){
+            $suma  =$suma + $ks['liczba_sztuk'];
+        }
+
+        return $suma;
+    }
 
 	/**
 	 * Zmienia (usuwa) ilości sztuk książek w koszyku.

@@ -11,8 +11,10 @@ define('ROK_AKADEMICKI', (date('Y') - 1) . '/' . date('Y'));
 require_once 'vendor/autoload.php';
 
 use Ibd\Menu;
+use Ibd\Koszyk;
 
-$liczbaKsiazekWKoszyku = 0;
+$koszyk = new Koszyk();
+$liczbaKsiazekWKoszyku = $koszyk->policzKsiazki(session_id());
 $koszykHtml = "<span class='badge badge-dark' id='wKoszyku'>$liczbaKsiazekWKoszyku</span>";
 ?>
 
@@ -44,6 +46,9 @@ $koszykHtml = "<span class='badge badge-dark' id='wKoszyku'>$liczbaKsiazekWKoszy
 					<?= Menu::generujOpcje('index.php', 'Strona główna') ?>
                     <?= Menu::generujOpcje('ksiazki.lista.php', 'Książki') ?>
                     <?= Menu::generujOpcje('koszyk.lista.php', "Koszyk $koszykHtml") ?>
+                    <?php if (!empty($_SESSION['id_uzytkownika'])): ?>
+                        <?= Menu::generujOpcje('moje.zamowienia.php', "Moje zamówienia") ?>
+                    <?php endif; ?>
                 </ul>
             </div>
         </nav>

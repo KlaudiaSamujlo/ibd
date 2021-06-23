@@ -1,15 +1,24 @@
 <?php
 
 use Ibd\Ksiazki;
+use Ibd\Koszyk;
 
 $ksiazki = new Ksiazki();
+$koszyk = new Koszyk();
 
 // pobieranie bestsellerow
 $lista = $ksiazki->pobierzBestsellery();
 
+// Suma w koszyku
+$wKoszyku = $koszyk->pobierzWszystkie();
+$suma = 0.00;
+foreach ($wKoszyku as $ks) {
+    $suma += $ks['cena'] * $ks['liczba_sztuk'];
+}
+$sumaHtml = "<span id='suma'>$suma</span>";
 ?>
 
-div class="col-md-3">
+<div class="col-md-3">
     <?php if (empty($_SESSION['id_uzytkownika'])): ?>
         <h1>Logowanie</h1>
 
@@ -39,7 +48,7 @@ div class="col-md-3">
     <h1>Koszyk</h1>
     <p>
         Suma wartości książek w koszyku:
-        <strong>0</strong> PLN
+        <strong><?= $sumaHtml ?></strong> PLN
     </p>
 
     <h1>Bestsellery</h1>

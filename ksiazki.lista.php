@@ -97,6 +97,7 @@ $lista = $ksiazki->pobierzStrone($select, $zapytanie['parametry']);
                     <a href="koszyk.dodaj.php?id=<?=$ks['id'] ?>" title="dodaj do koszyka" class="aDodajDoKoszyka">
                         <i class="fas fa-cart-plus"></i>
                     </a>
+                    </a>
                     <a href="ksiazki.szczegoly.php?id=<?= $ks['id'] ?>" title="szczegóły">
                         <i class="fas fa-folder-open"></i>
                     </a>

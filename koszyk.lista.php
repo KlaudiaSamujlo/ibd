@@ -12,6 +12,10 @@ if(isset($_POST['zmien'])) {
 }
 
 $listaKsiazek = $koszyk->pobierzWszystkie();
+$suma = 0.0;
+foreach ($listaKsiazek as $ks) {
+    $suma += $ks['cena'] * $ks['liczba_sztuk'];
+}
 
 include 'header.php';
 ?>
@@ -19,7 +23,7 @@ include 'header.php';
 <h2>Koszyk</h2>
 
 <form method="post" action="">
-	<table class="table table-striped table-condensed">
+	<table class="table table-striped table-condensed" id="koszyk" >
 		<thead>
 			<tr>
 				<th>&nbsp;</th>
@@ -36,7 +40,7 @@ include 'header.php';
 		<?php if(count($listaKsiazek) > 0): ?>
 			<tbody>
 				<?php foreach($listaKsiazek as $ks): ?>
-					<tr>
+					<tr >
                         <td style="width: 100px">
 							<?php if(!empty($ks['zdjecie'])): ?>
 								<img src="zdjecia/<?= $ks['zdjecie'] ?>" alt="<?= $ks['tytul'] ?>" class="img-thumbnail" />
@@ -54,9 +58,9 @@ include 'header.php';
 							</div>
 						</td>
 						<td><?= $ks['cena'] * $ks['liczba_sztuk'] ?></td>
-						<td style="white-space: nowrap">
-							<a href="koszyk.usun.php" title="usuń z koszyka">
-                                <i class="fas fa-trash"></i>
+						<td style="white-space: nowrap" >
+							<a href="koszyk.usun.php?id=<?=$ks['id_koszyka']?>" title="usuń z koszyka" class="aUsunZKoszyka">
+                                <i class="fas fa-trash" ></i>
 							</a>
 							<a href="ksiazki.szczegoly.php?id=<?=$ks['id']?>" title="szczegóły">
                                 <i class="fas fa-folder-open"></i>
@@ -66,8 +70,9 @@ include 'header.php';
 				<?php endforeach; ?>
 			</tbody>
             <tfoot>
+
                 <tr>
-                    <td colspan="4">&nbsp;</td>
+                    <td colspan="4" class="text-left" style="font-size: 18px"> Razem do zapłaty: <b> <?= $suma ?> zł </b></td>
                     <td colspan="4" class="text-right">
                         <input type="submit" class="btn btn-secondary btn-sm" name="zmien" value="Zmień liczbę sztuk" />
                         <?php if (!empty($_SESSION['id_uzytkownika'])): ?>
