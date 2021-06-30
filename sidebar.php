@@ -15,7 +15,7 @@ $suma = 0.00;
 foreach ($wKoszyku as $ks) {
     $suma += $ks['cena'] * $ks['liczba_sztuk'];
 }
-$sumaHtml = "<span id='suma'>$suma</span>";
+$sumaHtml = "<span id='sumaWKoszyku'>$suma</span>";
 ?>
 
 <div class="col-md-3">
@@ -55,9 +55,8 @@ $sumaHtml = "<span id='suma'>$suma</span>";
     <ul>
         <?php foreach ($lista as $ks): ?>
             <li>
-                <a href="ksiazki.szczegoly.php?id=<?= $ks['id'] ?>" title="szczegóły"> "<?= $ks['tytul'] ?>" </a>
-                <br>
-                <?= $ksiazki->pobierzAutora((int)$ks['id']) ?>
+                <a href="ksiazki.szczegoly.php?id=<?= $ks['id'] ?>" title="szczegóły"> "<?= $ks['tytul'] ?>" </a><br>
+                <?= $ksiazki->pobierzAutora((int)$ks['id']) ?><br>
 
                 <?php if (!empty($ks['zdjecie'])): ?>
                     <a href="ksiazki.szczegoly.php?id=<?= $ks['id'] ?>" title="szczegóły">

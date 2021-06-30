@@ -11,12 +11,31 @@ const dodajDoKoszyka = async (e) => {
             const wKoszyku = document.querySelector('#wKoszyku')
             wKoszyku.innerHTML = parseInt(wKoszyku.innerHTML) + 1
             a.outerHTML = '<i class="fas fa-check text-success"></i>'
-            //const suma = document.querySelector('#suma')
-            //suma.innerHTML = '1000'
+            const sumaWKoszyku = document.querySelector('#sumaWKoszyku')
+            sumaWKoszyku.innerHtml = parseInt(sumaWKoszyku.innerHTML) + 1
         } else {
             alert('Wystąpił błąd: ' + txt);
         }
     }
+}
+
+document.body.onload = () => {
+    const ksiazki = document.querySelector('#ksiazki')
+    if (ksiazki) {
+        ksiazki.addEventListener('click', dodajDoKoszyka)
+    }
+
+    // autorzy
+    document.querySelectorAll('.aUsunAutora').forEach(a => a.addEventListener('click', usunRekord))
+
+    // użytkownicy
+    document.querySelectorAll('.aUsunUzytkownika').forEach(a => a.addEventListener('click', usunRekord))
+
+    // książki
+    document.querySelectorAll('.aUsunKsiazke').forEach(a => a.addEventListener('click', usunRekord))
+
+    // kategorie
+    document.querySelectorAll('.aUsunKategorie').forEach(a => a.addEventListener('click', usunRekord))
 }
 
 /**
@@ -24,10 +43,12 @@ const dodajDoKoszyka = async (e) => {
  *
  */
 async function usunRekord(e) {
-    const b = e.target.closest('a.aUsunZKoszyka')
 
-    if(b){
-        e.preventDefault()
+    e.preventDefault()
+
+    if(e.target.closest('a.aUsunAutora') && parseInt(e.target.closest('td').previousElementSibling.innerHTML)>0) {
+        alert('Nie można usunąc autora, który ma przypisaną przynajmniej jedną książkę.');
+    } else {
         if (confirm('Czy na pewno chcesz usunąć rekord?')) {
             const a = e.target.parentNode
             const resp = await fetch(a.getAttribute('href'), {method: 'POST'})
@@ -41,27 +62,6 @@ async function usunRekord(e) {
             }
         }
     }
-}
-
-document.body.onload = () => {
-    const ksiazki = document.querySelector('#ksiazki')
-    if (ksiazki) {
-        ksiazki.addEventListener('click', dodajDoKoszyka)
-    }
-
-    const koszyk = document.querySelector('#koszyk')
-    if (koszyk) {
-        koszyk.addEventListener('click', usunRekord)
-    }
-
-    // autorzy
-    document.querySelectorAll('.aUsunAutora').forEach(a => a.addEventListener('click', usunRekord))
-
-    // użytkownicy
-    document.querySelectorAll('.aUsunUzytkownika').forEach(a => a.addEventListener('click', usunRekord))
-
-    // książki
-    document.querySelectorAll('.aUsunKsiazke').forEach(a => a.addEventListener('click', usunRekord))
 }
 
 

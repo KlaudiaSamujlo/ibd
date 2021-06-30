@@ -61,7 +61,7 @@ include 'header.php';
 						</td>
 						<td><?= $ks['cena'] * $ks['liczba_sztuk'] ?></td>
 						<td style="white-space: nowrap" >
-							<a href="koszyk.usun.php?id=<?=$ks['id_koszyka']?>" title="usuń z koszyka" class="aUsunZKoszyka">
+							<a href="koszyk.usun.php?id=<?=$ks['id_koszyka']?>" title="usuń z koszyka" class="aUsunKsiazke">
                                 <i class="fas fa-trash" ></i>
 							</a>
 							<a href="ksiazki.szczegoly.php?id=<?=$ks['id']?>" title="szczegóły">
@@ -74,8 +74,8 @@ include 'header.php';
             <tfoot>
 
                 <tr>
-                    <td colspan="4" class="text-left" style="font-size: 18px"> Razem do zapłaty: <b> <?= round($suma,2) ?> zł </b></td>
-                    <td colspan="4" class="text-right">
+                    <td colspan="3" class="text-left" style="font-size: 18px"> Razem do zapłaty: <b> <?= round($suma,2) ?> zł </b></td>
+                    <td colspan="5" class="text-right">
                         <input type="submit" class="btn btn-secondary btn-sm" name="zmien" value="Zmień liczbę sztuk" />
                         <?php if (!empty($_SESSION['id_uzytkownika'])): ?>
                             <a href="zamowienie.php" class="btn btn-primary btn-sm">Złóż zamówienie</a>

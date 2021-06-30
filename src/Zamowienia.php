@@ -70,6 +70,21 @@ class Zamowienia
     }
 
     /**
+     * Pobiera statusy.
+     *
+     * @return array
+     */
+    public function pobierzStatusy(): array
+    {
+        $sql = "
+			SELECT s.*
+			FROM zamowienia_statusy s
+	    ";
+
+        return $this->db->pobierzWszystko($sql);
+    }
+
+    /**
      * Pobiera zamówienia danego użytkownika.
      *
      * @param int     $idUzytkownika
@@ -132,5 +147,21 @@ class Zamowienia
 	    ";
 
         return $this->db->pobierzWszystko($sql, ['id' => $idZamowienia]);
+    }
+
+    /**
+     * Zmienia dane zamówienia.
+     *
+     * @param array $dane
+     * @param int   $id
+     * @return bool
+     */
+    public function edytuj(array $dane, int $id): bool
+    {
+        $update = [
+            'id_statusu' => $dane['id_statusu']
+        ];
+
+        return $this->db->aktualizuj('zamowienia', $update, $id);
     }
 }

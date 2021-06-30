@@ -29,13 +29,13 @@ $lista = $zamowienia->pobierzWszystkie();
 			<tr>
 				<td><?=$z['id']?></td>
 				<td><?=$z['login']?></td>
-				<td><?=$z['status']?></td>
+                <td><?=$z['status']?></td>
 				<td><?=$z['suma']?></td>
 				<td><?=$z['liczba_produktow']?></td>
 				<td><?=$z['liczba_sztuk']?></td>
 				<td><?=$z['data_dodania']?></td>
 				<td>
-					<a href="admin.zamowienia.szczegoly.php?id=<?= $z['id'] ?>" title="szczegoly"><em class="fas fa-pencil"></em></a>
+					<a href="admin.zamowienia.szczegoly.php?id=<?= $z['id'] ?>" title="szczegoly"><em class="fas fa-folder-open"></em></a>
 				</td>
 			</tr>
 		<?php endforeach; ?>

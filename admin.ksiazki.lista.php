@@ -27,7 +27,7 @@ $listaAutorow = $autorzy->pobierzWszystko("SELECT * FROM autorzy");
 	<p class="alert alert-success">Książka została dodana.</p>
 <?php endif; ?>
 
-<table id="ksiazki" class="table table-striped table-condensed">
+<table id="ksiazkiAdmin" class="table table-striped table-condensed">
 	<thead>
 		<tr>
 			<th>&nbsp;</th>

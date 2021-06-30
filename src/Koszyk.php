@@ -32,7 +32,7 @@ class Koszyk
 	}
 
     /**
-     * Zwraca id koszyka na podstawie id książki i id sesji.
+     * Zwiększa ilość sztuk w koszyku dla książki, która już się w nim znajdowała.
      *
      * @param int    $idKsiazki
      * @param string $idSesji
@@ -114,6 +114,17 @@ class Koszyk
             }
 		}
 	}
+
+    /**
+     * Usuwa książkę z koszyka.
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function usun(int $id): bool
+    {
+        return $this->db->usun('koszyk', $id);
+    }
 
     /**
      * Czyści koszyk.

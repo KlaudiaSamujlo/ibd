@@ -6,8 +6,9 @@ require_once 'vendor/autoload.php';
 
 use Ibd\Koszyk;
 
-$koszyk = new Koszyk();
-
-$id = (int)$_GET['id'];
-$koszyk->zmienLiczbeSztuk([$id => 0]);
-echo 'ok';
+if(isset($_POST)) {
+    $koszyk = new Koszyk();
+    if ($koszyk->usun($_GET['id'])) {
+        echo 'ok';
+    }
+}
